@@ -18,6 +18,7 @@ const instance = axios.create({
 	},
 })
 
+// used in nhlscores
 app.get('/gamecenter/:gameId/boxscore', async (req, res) => {
 	const gameId = req.params.gameId
 
@@ -57,9 +58,31 @@ app.get('/schedule/:date', async (req, res) => {
 	}
 })
 
-// Start the proxy server
-// app.listen(port, () => {
-// 	console.log('Proxy server is running on port ' + port)
-// })
+// used in trade-center:
+app.get('/games/:teamAbbrev', async (req, res) => {
+	const teamAbbrev = req.params.teamAbbrev
+
+	try {
+		const response = await instance.get(
+			'/club-schedule-season/' + teamAbbrev + '/now'
+		)
+		res.json(response.data.games)
+	} catch (error) {
+		res.status(500).json({
+			error: 'Server error when fetching schedule',
+		})
+	}
+})
+
+app.get('/standings', async (req, res) => {
+	try {
+		const response = await instance.get('/standings/now')
+		res.json(response.data.standings)
+	} catch (error) {
+		res.status(500).json({
+			error: 'Server error when fetching standings',
+		})
+	}
+})
 
 export default app
