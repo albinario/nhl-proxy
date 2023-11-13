@@ -2,7 +2,6 @@ import express from 'express'
 import axios from 'axios'
 
 const app = express()
-// const port = 3000
 
 app.use((_req, res, next) => {
 	res.header('Access-Control-Allow-Origin', '*')
@@ -18,7 +17,6 @@ const instance = axios.create({
 	},
 })
 
-// used in nhlscores
 app.get('/gamecenter/:gameId/boxscore', async (req, res) => {
 	const gameId = req.params.gameId
 
@@ -45,20 +43,6 @@ app.get('/gamecenter/:gameId/landing', async (req, res) => {
 	}
 })
 
-app.get('/schedule/:date', async (req, res) => {
-	const date = req.params.date
-
-	try {
-		const response = await instance.get('/schedule/' + date)
-		res.json(response.data.gameWeek[0].games)
-	} catch (error) {
-		res.status(500).json({
-			error: 'Server error when fetching schedule',
-		})
-	}
-})
-
-// used in trade-center:
 app.get('/games/:teamAbbrev', async (req, res) => {
 	const teamAbbrev = req.params.teamAbbrev
 
@@ -67,6 +51,19 @@ app.get('/games/:teamAbbrev', async (req, res) => {
 			'/club-schedule-season/' + teamAbbrev + '/now'
 		)
 		res.json(response.data.games)
+	} catch (error) {
+		res.status(500).json({
+			error: 'Server error when fetching schedule',
+		})
+	}
+})
+
+app.get('/schedule/:date', async (req, res) => {
+	const date = req.params.date
+
+	try {
+		const response = await instance.get('/schedule/' + date)
+		res.json(response.data.gameWeek[0].games)
 	} catch (error) {
 		res.status(500).json({
 			error: 'Server error when fetching schedule',
