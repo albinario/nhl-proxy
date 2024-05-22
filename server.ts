@@ -44,5 +44,5 @@ server.on('error', (err: NodeJS.ErrnoException) => {
  * Event listener for HTTP server "listening" event.
  */
 server.on('listening', () => {
-	console.log(`💥 Yay, server started on http://localhost:${PORT}`)
+	console.log(`💥 Yay, server started on port ${PORT}`)
 })
